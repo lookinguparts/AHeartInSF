@@ -1,22 +1,26 @@
-//***************************************************************
-// Windows in to Art, an interactive LED heart sculpture in 
+//**********************************************************************
+// Windows in to Art, an interactive LED heart sculpture in
 // San Francisco by Josh Zubkoff, Srikanth Guttikonda, Dede Lucia
-// Software Contributers 
-// Pattern by Hike Danakian
-// Base code from Heart Pulse, by Marc Miller, Jan 2016
-// Base code from 
-//***************************************************************
+// -Software Contributers
+//  LED patterns by Hike Danakian
+//  An LED pattern base code from Heart Pulse, by Marc Miller, Jan 2016
+//  An LED pattern base code from Color palette, a FastLED library example
+// -Fabrication Contributers
+//  Kyle Matlock
+//  Sarah King
+//**********************************************************************
 #include <array>
 #include "FastLED.h"
 
 #define LED_TYPE WS2811
 #define DATA_PIN 2
-//#define CLOCK_PIN 13
-#define NUM_LEDS 58 // number of LEDs, not including null pixel
+#define NUM_LEDS 58  // number of LEDs, including null pixel
 #define COLOR_ORDER GBR
-CRGB leds[NUM_LEDS+1];
+CRGB leds[NUM_LEDS + 1];
 CRGB colors[NUM_LEDS];
 #define BRIGHTNESS 255
+const int analogInPin = A14;  //A Photo Transistor Sensor is attached, using a 10k Ohm resistor
+int sensorValue = 0; // value read from the pot
 
 uint8_t bloodHue = 96;        // Blood color [hue from 0-255]
 uint8_t bloodSat = 255;       // Blood staturation [0-255]
@@ -26,20 +30,20 @@ uint16_t pulseLength = 300;   // How long the pulse takes to fade out.  Higher v
 uint16_t pulseOffset = 350;   // Delay before second pulse.  Higher value is more delay.
 uint8_t baseBrightness = 30;  // Brightness of LEDs when not pulsing. Set to 0 for off.
 
-uint32_t windowTransitionMillis = 500; //Old val 200
-uint32_t windowTransitionIntervalMin = 300; //Old val 500
+uint32_t windowTransitionMillis = 500;       //Old val 200
+uint32_t windowTransitionIntervalMin = 300;  //Old val 500
 uint32_t windowTransitionIntervalMax = 2000;
 
 #define WINDOW_COUNT 11
 std::array<uint8_t, WINDOW_COUNT> windowLedCounts{
-  {3, 6, 2, 4, 8, 8, 4, 8, 2, 6, 6}
+  { 3, 6, 2, 4, 8, 8, 4, 8, 2, 6, 6 }
 };
-std::array<uint8_t, WINDOW_COUNT+1> windowLedOffsets;
-std::array<uint8_t, WINDOW_COUNT+1> windowBrightness{0};
+std::array<uint8_t, WINDOW_COUNT + 1> windowLedOffsets;
+std::array<uint8_t, WINDOW_COUNT + 1> windowBrightness{ 0 };
 uint32_t nextTransitionTime = 0;
 bool isWindowTransitioning = false;
 uint8_t transitioningWindowIndex = 0;
-bool transitioningWindowDirection = false; // false: turn off, true: turn on
+bool transitioningWindowDirection = false;  // false: turn off, true: turn on
 
 //---------------------------------------------------------------
 void setup() {
@@ -61,6 +65,8 @@ void setup() {
 
 //---------------------------------------------------------------
 void loop() {
+// read the analog in value:
+  sensorValue = analogRead(analogInPin);  
   uint32_t currentTime = millis();
 
   if (!isWindowTransitioning && currentTime > nextTransitionTime) {
@@ -103,9 +109,14 @@ void loop() {
   }
 
   //heartBeat();  // Heart beat function
-  fill_solid(colors, NUM_LEDS, CRGB::Red);
+  if (sensorValue > 4) {
+fill_solid(colors, NUM_LEDS, CRGB::Pink);
+  }
+   if (sensorValue < 4) {
+fill_solid(colors, NUM_LEDS, CRGB::Red);
+  }
 
-  leds[0] = CRGB::Black; // null pixel
+  leds[0] = CRGB::White;  // null pixel
 
   for (int i = 0; i < WINDOW_COUNT; ++i) {
     for (int j = windowLedOffsets[i]; j < windowLedOffsets[i + 1]; ++j) {
