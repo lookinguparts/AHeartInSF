@@ -1,4 +1,4 @@
-#**********************************************************************
+
 # Windows in to Art, an interactive LED heart sculpture in
 # San Francisco by Josh Zubkoff, Srikanth Guttikonda, Dede Lucia
 # -Software Contributers
@@ -8,7 +8,7 @@
 # -Fabrication Contributers
 #  Kyle Matlock
 #  Sarah King
-#**********************************************************************
+
  
 #Libraries to get
  #FastLED
