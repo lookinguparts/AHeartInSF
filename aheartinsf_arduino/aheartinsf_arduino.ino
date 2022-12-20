@@ -11,16 +11,19 @@
 //**********************************************************************
 #include <array>
 #include "FastLED.h"
+#include <runningAvg.h>   // The include of the .h file.
 
 #define LED_TYPE WS2811
 #define DATA_PIN 2
 #define NUM_LEDS 58  // number of LEDs, including null pixel
-#define COLOR_ORDER GBR
+#define COLOR_ORDER RBG
 CRGB leds[NUM_LEDS + 1];
 CRGB colors[NUM_LEDS];
 #define BRIGHTNESS 255
 const int analogInPin = A14;  //A Photo Transistor Sensor is attached, using a 10k Ohm resistor
 int sensorValue = 0; // value read from the pot
+int ave = 0; //average sensor value
+runningAvg  smoother(10);   // Create a running average of 5 value smoother. (global variable)
 
 uint8_t bloodHue = 96;        // Blood color [hue from 0-255]
 uint8_t bloodSat = 255;       // Blood staturation [0-255]
@@ -66,7 +69,8 @@ void setup() {
 //---------------------------------------------------------------
 void loop() {
 // read the analog in value:
-  sensorValue = analogRead(analogInPin);  
+  sensorValue = analogRead(analogInPin);
+  ave = smoother.addData(sensorValue);        // Pop this number into our smoother. (Running average object.) Out pops the average.]  
   uint32_t currentTime = millis();
 
   if (!isWindowTransitioning && currentTime > nextTransitionTime) {
@@ -109,11 +113,11 @@ void loop() {
   }
 
   //heartBeat();  // Heart beat function
-  if (sensorValue > 4) {
-fill_solid(colors, NUM_LEDS, CRGB::Pink);
-  }
-   if (sensorValue < 4) {
+  if (ave > 4) {
 fill_solid(colors, NUM_LEDS, CRGB::Red);
+  }
+   if (ave < 4) {
+fill_solid(colors, NUM_LEDS, CRGB::HotPink);
   }
 
   leds[0] = CRGB::White;  // null pixel
