@@ -23,7 +23,7 @@ CRGB leds[NUM_LEDS+1];
 CRGB colors[NUM_LEDS];
 
 //Window color: Yellow
-uint8_t windowHue = 42;
+uint8_t windowHue = 64;
 uint8_t windowSat = 255;
 uint8_t windowVal = 255;
 
@@ -38,7 +38,7 @@ uint32_t patternTransitionMillis = 1000;
 uint32_t patternTransitionInterval = 1 * 60000;
 
 //Blood pattern related
-uint8_t bloodHue = 96;        // Blood color [hue from 0-255]
+uint8_t bloodHue = 0;        // Blood color [hue from 0-255]
 uint8_t bloodSat = 255;       // Blood staturation [0-255]
 int flowDirection = -1;       // Use either 1 or -1 to set flow direction
 uint16_t cycleLength = 1500;  // Lover values = continuous flow, higher values = distinct pulses.
