@@ -1,7 +1,6 @@
 
 # Windows in to Art
-#an interactive LED heart sculpture in San Francisco 
-#by Josh Zubkoff, Srikanth Guttikonda, Dede Lucia
+#an interactive LED heart sculpture in San Francisco by Josh Zubkoff, Srikanth Guttikonda, Dede Lucia
  # Software Contributers
   #LED patterns by Hike Danakian
   #An LED pattern base code from Heart Pulse, by Marc Miller, Jan 2016
@@ -10,7 +9,6 @@
   #Kyle Matlock
   #Sarah King
 
- 
 # Libraries involved
   #FastLED
   #LCbaseTools by Jim Lee
